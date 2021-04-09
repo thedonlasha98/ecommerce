@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 public class MailDto {
     @NotNull
-    private String name;
+    private String subject;
 
     @NotNull
     @Email
@@ -14,14 +14,14 @@ public class MailDto {
 
     @NotNull
     @Min(10)
-    private String feedback;
+    private String body;
 
-    public String getName() {
-        return name;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getEmail() {
@@ -32,11 +32,11 @@ public class MailDto {
         this.email = email;
     }
 
-    public String getFeedback() {
-        return feedback;
+    public String getBody() {
+        return body;
     }
 
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
+    public void setBody(String body) {
+        this.body = body;
     }
 }

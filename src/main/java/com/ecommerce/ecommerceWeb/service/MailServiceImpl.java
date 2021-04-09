@@ -17,16 +17,16 @@ public class MailServiceImpl implements MailService{
         this.emailCfg = emailCfg;
     }
     @Override
-    public void sendFeedback(MailDto mailDto) {
+    public void sendMail(MailDto mailDto) {
         // Create a mail sender
 
 
         // Create an email instance
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(mailDto.getEmail());
-        mailMessage.setTo("lbolga1998@gmail.com");
-        mailMessage.setSubject("New mailDto from " + mailDto.getName());
-        mailMessage.setText(mailDto.getFeedback());
+        mailMessage.setFrom("thedonlasha@gmail.com");
+        mailMessage.setTo(mailDto.getEmail());
+        mailMessage.setSubject(mailDto.getSubject());
+        mailMessage.setText(mailDto.getBody());
         // Send mail
         javaMailSender.send(mailMessage);
     }

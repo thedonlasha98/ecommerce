@@ -22,4 +22,10 @@ public class EcommerceFacade {
     public void setPassword(String password, String rePassword){
         ecommerceService.setPassword(password,rePassword);
     }
+
+    public void authorization(String email, String password){ecommerceService.authorization(email,password);}
+
+    public String resetPassword(String pin) {
+       return  ecommerceService.resetPassword(pin);
+    }
 }

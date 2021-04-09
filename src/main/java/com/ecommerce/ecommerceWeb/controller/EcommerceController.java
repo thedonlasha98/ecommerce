@@ -28,6 +28,21 @@ public class EcommerceController {
     @PostMapping("/password/")
     public ResponseEntity<Void> setPassword(String password, String rePassword){
         ecommerceFacade.setPassword(password, rePassword);
+
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/authorization/")
+    public ResponseEntity<Void> authorization(String email, String password){
+        ecommerceFacade.authorization(email, password);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<String> resetPassword(String pin){
+        String response = ecommerceFacade.resetPassword(pin);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
