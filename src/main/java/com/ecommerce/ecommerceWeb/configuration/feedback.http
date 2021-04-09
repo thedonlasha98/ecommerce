@@ -1,0 +1,10 @@
+POST http://localhost:8090/api/ecom/email
+Content-Type: application/json
+
+{
+  "name": "lasha",
+  "email": "thedonlasha@gmail.com",
+  "mailDto": "You app is awesome :)"
+}
+
+###
