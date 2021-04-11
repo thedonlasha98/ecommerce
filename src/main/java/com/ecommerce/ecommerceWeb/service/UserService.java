@@ -2,7 +2,7 @@ package com.ecommerce.ecommerceWeb.service;
 
 import com.ecommerce.ecommerceWeb.model.UserDto;
 
-public interface EcommerceService {
+public interface UserService {
 
     void registerUser(UserDto userDto);
 

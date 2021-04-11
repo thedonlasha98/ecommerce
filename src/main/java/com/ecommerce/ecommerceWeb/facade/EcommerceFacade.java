@@ -1,7 +1,9 @@
 package com.ecommerce.ecommerceWeb.facade;
 
+import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.model.UserDto;
-import com.ecommerce.ecommerceWeb.service.EcommerceService;
+import com.ecommerce.ecommerceWeb.service.ProductService;
+import com.ecommerce.ecommerceWeb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +15,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class EcommerceFacade {
     @Autowired
-    EcommerceService ecommerceService;
+    private UserService userService;
 
-    public void registerUser(UserDto userDto){
-        ecommerceService.registerUser(userDto);
+    @Autowired
+    private ProductService productService;
+
+    public void registerUser(UserDto userDto) {
+        userService.registerUser(userDto);
     }
 
-    public void setPassword(String password, String rePassword){
-        ecommerceService.setPassword(password,rePassword);
+    public void setPassword(String password, String rePassword) {
+        userService.setPassword(password, rePassword);
     }
 
-    public void authorization(String email, String password){ecommerceService.authorization(email,password);}
+    public void authorization(String email, String password) {
+        userService.authorization(email, password);
+    }
 
     public String resetPassword(String pin) {
-       return  ecommerceService.resetPassword(pin);
+        return userService.resetPassword(pin);
     }
+
+    public String addProducts(ProductDto productDto){
+        return productService.addProduct(productDto);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.ecommerce.ecommerceWeb.controller;
 
 import com.ecommerce.ecommerceWeb.facade.EcommerceFacade;
 import com.ecommerce.ecommerceWeb.model.MailDto;
+import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.model.UserDto;
 import com.ecommerce.ecommerceWeb.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/api/ecom")
 public class EcommerceController {
 
@@ -42,6 +44,13 @@ public class EcommerceController {
     @PostMapping("/reset")
     public ResponseEntity<String> resetPassword(String pin){
         String response = ecommerceFacade.resetPassword(pin);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/add-product")
+    public ResponseEntity<String> addProduct(ProductDto productDto){
+        String response = ecommerceFacade.addProducts(productDto);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
