@@ -1,16 +1,22 @@
 package com.ecommerce.ecommerceWeb.ropository;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.ecommerce.ecommerceWeb.domain.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
-public interface UserRepository extends CrudRepository<User,Long> {
-    User findByEmailAndPassword(String email, String password);
+public interface UserRepository extends JpaRepository<User, Long> {
+//	Optional<User> findByUsername(String username);
+//
+//	Boolean existsByUsername(String username);
 
-    User findByPin(String pin);
+	Boolean existsByEmail(String email);
 
-    List<User> findByEmailOrPin(String email, String pin);
+	Optional<User> findByEmail(String email);
+
+	User findByEmailAndPassword(String email, String password);
 }

@@ -2,9 +2,9 @@ package com.ecommerce.ecommerceWeb.exception;
 
 public enum ErrorCode {
 
-    USER_BY_THIS_EMAIL_ALREADY_EXISTS("User by this email, already exists!"),
+    USER_BY_THIS_EMAIL_ALREADY_EXISTS("UserTest by this email, already exists!"),
 
-    USER_BY_THIS_PIN_ALREADY_EXISTS("User by this pin, already exists!"),
+    USER_BY_THIS_PIN_ALREADY_EXISTS("UserTest by this pin, already exists!"),
 
     PASSWORD_NOT_EQUALS("password not equals"),
 

@@ -20,33 +20,33 @@ public class EcommerceController {
     @Autowired
     private EcommerceFacade ecommerceFacade;
 
-    @PostMapping("/register/")
-    public ResponseEntity<Void> registerUser(UserDto userDto){
-        ecommerceFacade.registerUser(userDto);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/password/")
-    public ResponseEntity<Void> setPassword(String password, String rePassword){
-        ecommerceFacade.setPassword(password, rePassword);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/authorization/")
-    public ResponseEntity<Void> authorization(String email, String password){
-        ecommerceFacade.authorization(email, password);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(String pin){
-        String response = ecommerceFacade.resetPassword(pin);
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
+//    @PostMapping("/register/")
+//    public ResponseEntity<Void> registerUser(UserDto userDto){
+//        ecommerceFacade.registerUser(userDto);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/password/")
+//    public ResponseEntity<Void> setPassword(String password, String rePassword){
+//        ecommerceFacade.setPassword(password, rePassword);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/authorization/")
+//    public ResponseEntity<Void> authorization(String email, String password){
+//        ecommerceFacade.authorization(email, password);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/reset")
+//    public ResponseEntity<String> resetPassword(String pin){
+//        String response = ecommerceFacade.resetPassword(pin);
+//
+//        return new ResponseEntity<>(response,HttpStatus.OK);
+//    }
 
     @PostMapping("/add-product")
     public ResponseEntity<String> addProduct(ProductDto productDto){

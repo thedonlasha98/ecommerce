@@ -1,7 +1,9 @@
 package com.ecommerce.ecommerceWeb.service;
 
 import com.ecommerce.ecommerceWeb.model.UserDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface UserService {
 
     void registerUser(UserDto userDto);

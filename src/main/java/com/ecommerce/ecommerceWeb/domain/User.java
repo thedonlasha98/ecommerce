@@ -1,48 +1,76 @@
 package com.ecommerce.ecommerceWeb.domain;
 
-
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "ECOM_USERS")
-@Getter
-@Setter
-@NoArgsConstructor
+@Table(	name = "users"
+//		,uniqueConstraints = {
+//			@UniqueConstraint(columnNames = "username"),
+//			@UniqueConstraint(columnNames = "email")
+//		}
+		)
 public class User {
-    @Id
-    @SequenceGenerator(name = "ECOM_USER_SEQ", sequenceName = "ECOM_USER_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_USER_SEQ")
-    @Column(name = "USER_ID")
-    private Long userId;
+	@Id
+	@SequenceGenerator(name = "ECOM_USER_SEQ", sequenceName = "ECOM_USER_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_USER_SEQ")
+	private Long id;
 
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+	//@NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
 
-    @Column(name = "LAST_NAME")
-    private String lastName;
+	//@NotBlank
+	@Size(max = 120)
+	private String password;
 
-    @Column(name = "PIN")
-    private String pin;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_roles", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "EMAIL")
-    private String email;
+	public User() {
+	}
 
-    @Column(name = "ACCT_NO")
-    private String acctNo;
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
 
-    @Column(name = "REG_DATE")
-    private LocalDateTime regDate;
+	public Long getId() {
+		return id;
+	}
 
-    @Column(name = "STATUS")
-    private String status;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Column(name = "PASSWORD")
-    private String password;
+	public String getEmail() {
+		return email;
+	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }

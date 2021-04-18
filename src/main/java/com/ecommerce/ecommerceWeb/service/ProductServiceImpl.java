@@ -102,6 +102,7 @@ public class ProductServiceImpl implements ProductService{
 
     public void deleteProducts(Long id, Long userId){
         Product product = productRepository.findByIdAndUserId(id, userId);
+        productRepository.deleteById(id);
         product.setStatus("D");
         productRepository.save(product);
         //create log
