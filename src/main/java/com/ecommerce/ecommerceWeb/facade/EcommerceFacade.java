@@ -20,21 +20,21 @@ public class EcommerceFacade {
     @Autowired
     private ProductService productService;
 
-    public void registerUser(UserDto userDto) {
-        userService.registerUser(userDto);
-    }
-
-    public void setPassword(String password, String rePassword) {
-        userService.setPassword(password, rePassword);
-    }
-
-    public void authorization(String email, String password) {
-        userService.authorization(email, password);
-    }
-
-    public String resetPassword(String pin) {
-        return userService.resetPassword(pin);
-    }
+//    public void registerUser(UserDto userDto) {
+//        userService.registerUser(userDto);
+//    }
+//
+//    public void setPassword(String password, String rePassword) {
+//        userService.setPassword(password, rePassword);
+//    }
+//
+//    public void authorization(String email, String password) {
+//        userService.authorization(email, password);
+//    }
+//
+//    public String resetPassword(String pin) {
+//        return userService.resetPassword(pin);
+//    }
 
     public String addProducts(ProductDto productDto){
         return productService.addProduct(productDto);

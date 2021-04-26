@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(	name = "users"
+@Table(	name = "ECOM_USERS"
 //		,uniqueConstraints = {
 //			@UniqueConstraint(columnNames = "username"),
 //			@UniqueConstraint(columnNames = "email")

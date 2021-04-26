@@ -1,11 +1,15 @@
 package com.ecommerce.ecommerceWeb.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
 
     private Long productId;
@@ -16,7 +20,7 @@ public class ProductDto {
 
     private byte[] photo;
 
-    private String price;
+    private Double price;
 
     private String status;
 

@@ -2,12 +2,15 @@ package com.ecommerce.ecommerceWeb.domain;
 
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "ECOM_ACCOUNTS")
@@ -33,4 +36,19 @@ public class Account {
 
     @Column(name = "REG_DATE")
     private LocalDateTime regDate;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinTable(	name = "ECOM_USERS",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "email"))
+    private User user;
+
+    public Account(Long userId, String firstName, String lastName, String pin, String acctNo, LocalDateTime regDate) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pin = pin;
+        this.acctNo = acctNo;
+        this.regDate = regDate;
+    }
 }

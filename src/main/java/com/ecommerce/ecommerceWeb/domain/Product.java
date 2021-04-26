@@ -29,7 +29,7 @@ public class Product {
     private byte[] photo;
 
     @Column(name = "PRICE")
-    private String price;
+    private Double price;
 
     @Column(name = "STATUS")
     private String status;

@@ -35,36 +35,14 @@ public class ProductServiceImpl implements ProductService{
             product.setStatus("A");
             productRepository.save(product);
             //create log
-            ProductHist productHist = new ProductHist();
-            productHist.setProductId(product.getId());
-            productHist.setUserId(productDto.getUserId());
-            productHist.setProduct(productDto.getProduct());
-            productHist.setPhoto(productDto.getPhoto());
-            productHist.setPrice(productDto.getPrice());
-            productHist.setQuantity(productDto.getQuantity());
-            productHist.setStatus("A");
-            productHist.setEvent("ADD");
-            productHist.setInpSysDate(LocalDateTime.now());
-
-            productHistRepository.save(productHist);
+            createLog(productDto.getProductId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD");
 
             result = "პროდუქტი წარმატებით დარეგისტრირდა!";
         }else if(productExt.getStatus().equals("A")){
             productExt.setQuantity(productExt.getQuantity() + productDto.getQuantity());
             productRepository.save(productExt);
             //create log
-            ProductHist productHist = new ProductHist();
-            productHist.setProductId(productExt.getId());
-            productHist.setUserId(productDto.getUserId());
-            productHist.setProduct(productDto.getProduct());
-            productHist.setPhoto(productDto.getPhoto());
-            productHist.setPrice(productDto.getPrice());
-            productHist.setQuantity(productDto.getQuantity());
-            productHist.setStatus("A");
-            productHist.setEvent("ADD_CURRENT");
-            productHist.setInpSysDate(LocalDateTime.now());
-
-            productHistRepository.save(productHist);
+            createLog(productDto.getProductId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD_CURRENT");
 
             result = "არსებული პროდუქტის რაოდენობა გაიზარდა " + productDto.getQuantity() + "-ით!";
         }
@@ -82,18 +60,7 @@ public class ProductServiceImpl implements ProductService{
             product.setStatus("A");
             productRepository.save(product);
             //create log
-            ProductHist productHist = new ProductHist();
-            productHist.setProductId(product.getId());
-            productHist.setUserId(productDto.getUserId());
-            productHist.setProduct(productDto.getProduct());
-            productHist.setPhoto(productDto.getPhoto());
-            productHist.setPrice(productDto.getPrice());
-            productHist.setQuantity(productDto.getQuantity());
-            productHist.setStatus("A");
-            productHist.setEvent("MODIFY");
-            productHist.setInpSysDate(LocalDateTime.now());
-
-            productHistRepository.save(productHist);
+            createLog(product.getId(),productDto.getUserId(),product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"A","MODIFY");
 
             result = "პროდუქტი რედაქტირებულია!";
         }
@@ -106,18 +73,7 @@ public class ProductServiceImpl implements ProductService{
         product.setStatus("D");
         productRepository.save(product);
         //create log
-        ProductHist productHist = new ProductHist();
-        productHist.setProductId(product.getId());
-        productHist.setUserId(userId);
-        productHist.setProduct(product.getProduct());
-        productHist.setPhoto(product.getPhoto());
-        productHist.setPrice(product.getPrice());
-        productHist.setQuantity(product.getQuantity());
-        productHist.setStatus("D");
-        productHist.setEvent("DELETE");
-        productHist.setInpSysDate(LocalDateTime.now());
-
-        productHistRepository.save(productHist);
+        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"D","DELETE");
     }
 
     public void closeProducts(Long id, Long userId){
@@ -125,18 +81,7 @@ public class ProductServiceImpl implements ProductService{
         product.setStatus("C");
         productRepository.save(product);
         //create log
-        ProductHist productHist = new ProductHist();
-        productHist.setProductId(product.getId());
-        productHist.setUserId(userId);
-        productHist.setProduct(product.getProduct());
-        productHist.setPhoto(product.getPhoto());
-        productHist.setPrice(product.getPrice());
-        productHist.setQuantity(product.getQuantity());
-        productHist.setStatus("C");
-        productHist.setEvent("CLOSE");
-        productHist.setInpSysDate(LocalDateTime.now());
-
-        productHistRepository.save(productHist);
+        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"C","CLOSE");
     }
 
     public void activateProducts(Long id, Long userId){
@@ -144,15 +89,19 @@ public class ProductServiceImpl implements ProductService{
         product.setStatus("A");
         productRepository.save(product);
         //create log
+        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"A","ACTIVATE");
+    }
+
+    public void createLog(Long productId, Long userId, String product, byte[] photo, Double price, Long quantity, String status, String event){
         ProductHist productHist = new ProductHist();
-        productHist.setProductId(product.getId());
+        productHist.setProductId(productId);
         productHist.setUserId(userId);
-        productHist.setProduct(product.getProduct());
-        productHist.setPhoto(product.getPhoto());
-        productHist.setPrice(product.getPrice());
-        productHist.setQuantity(product.getQuantity());
-        productHist.setStatus("A");
-        productHist.setEvent("ACTIVATE");
+        productHist.setProduct(product);
+        productHist.setPhoto(photo);
+        productHist.setPrice(price);
+        productHist.setQuantity(quantity);
+        productHist.setStatus(status);
+        productHist.setEvent(event);
         productHist.setInpSysDate(LocalDateTime.now());
 
         productHistRepository.save(productHist);
