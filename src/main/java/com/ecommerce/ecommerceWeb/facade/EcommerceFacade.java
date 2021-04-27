@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerceWeb.facade;
 
+import com.ecommerce.ecommerceWeb.configuration.jwt.JwtUtils;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.model.UserDto;
 import com.ecommerce.ecommerceWeb.service.ProductService;
@@ -20,6 +21,8 @@ public class EcommerceFacade {
     @Autowired
     private ProductService productService;
 
+    @Autowired JwtUtils jwtUtils;
+
 //    public void registerUser(UserDto userDto) {
 //        userService.registerUser(userDto);
 //    }
@@ -37,6 +40,7 @@ public class EcommerceFacade {
 //    }
 
     public String addProducts(ProductDto productDto){
+        productDto.setUserId(jwtUtils.getUserId());
         return productService.addProduct(productDto);
     }
 

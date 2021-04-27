@@ -1,9 +1,11 @@
 package com.ecommerce.ecommerceWeb.configuration.jwt;
 
+import com.ecommerce.ecommerceWeb.ropository.UserRepository;
 import com.ecommerce.ecommerceWeb.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -11,7 +13,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtUtils {
+public final class JwtUtils {
+
+	@Autowired
+	private UserRepository userRepository;
+
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 	@Value("${bezkoder.app.jwtSecret}")
@@ -25,7 +31,7 @@ public class JwtUtils {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		return Jwts.builder()
-				.setSubject(String.valueOf((userPrincipal.getId())))
+				.setSubject((userPrincipal.getEmail()))
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -34,6 +40,11 @@ public class JwtUtils {
 
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+	}
+
+	public Long getUserId(){
+		String email = getUserNameFromJwtToken(AuthTokenFilter.token);
+		return userRepository.findByEmail(email).get().getId();
 	}
 
 	public boolean validateJwtToken(String authToken) {

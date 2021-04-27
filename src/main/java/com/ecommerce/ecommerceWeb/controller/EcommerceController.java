@@ -23,9 +23,7 @@ public class EcommerceController {
     private EcommerceFacade ecommerceFacade;
 
     @PostMapping("/add-product")
-    public ResponseEntity<String> addProduct(@RequestHeader("authorization") String authorization, ProductDto productDto){
-        Long userId = Long.valueOf(new JwtUtils().getUserNameFromJwtToken(authorization));
-        productDto.setUserId(userId);
+    public ResponseEntity<String> addProduct(ProductDto productDto){
         String response = ecommerceFacade.addProducts(productDto);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
