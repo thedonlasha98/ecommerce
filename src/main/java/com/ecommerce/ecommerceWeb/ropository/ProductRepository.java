@@ -9,4 +9,5 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     Product findByIdAndUserId(Long id, Long userId);
 
+    Product getProductById(Long id);
 }

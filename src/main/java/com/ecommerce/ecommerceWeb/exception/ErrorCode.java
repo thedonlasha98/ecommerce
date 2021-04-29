@@ -10,7 +10,9 @@ public enum ErrorCode {
 
     INCORRECT_CREDENTIALS("Incorrect Credentials"),
 
-    NOT_FOUND("Not Found");
+    NOT_FOUND("Not Found"),
+
+    PRODUCTS_USER_AND_USER_NOT_EQUALS("Product's user and user not equals!");
 
     String description;
 
@@ -24,6 +26,8 @@ public enum ErrorCode {
                 return ErrorCode.USER_BY_THIS_PIN_ALREADY_EXISTS;
             case USER_BY_THIS_EMAIL_ALREADY_EXISTS:
                 return ErrorCode.USER_BY_THIS_EMAIL_ALREADY_EXISTS;
+            case PRODUCTS_USER_AND_USER_NOT_EQUALS:
+                return ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS;
             default:
                 return ErrorCode.NOT_FOUND;
         }

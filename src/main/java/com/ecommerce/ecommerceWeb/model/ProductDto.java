@@ -1,15 +1,14 @@
 package com.ecommerce.ecommerceWeb.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ecommerce.ecommerceWeb.domain.Product;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductDto {
 
     private Long productId;
@@ -25,4 +24,17 @@ public class ProductDto {
     private String status;
 
     private Long quantity;
+
+    public static ProductDto transformProducts(Product product){
+        return ProductDto.builder()
+                .productId(product.getId())
+                .product(product.getProduct())
+                .userId(product.getUserId())
+                .photo(product.getPhoto())
+                .price(product.getPrice())
+                .status(product.getStatus())
+                .quantity(product.getQuantity())
+                .build();
+    }
+
 }

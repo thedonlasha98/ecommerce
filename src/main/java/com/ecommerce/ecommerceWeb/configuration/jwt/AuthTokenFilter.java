@@ -65,7 +65,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 		return userService.getUserByEmail(username).getId();
 		}
-		else throw new GeneralException(ErrorCode.NOT_FOUND);
+		else {
+			throw new GeneralException(ErrorCode.NOT_FOUND);
+		}
 	}
 
 	private String parseJwt(HttpServletRequest request) {

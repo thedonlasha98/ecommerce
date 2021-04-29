@@ -2,6 +2,8 @@ package com.ecommerce.ecommerceWeb.service;
 
 import com.ecommerce.ecommerceWeb.domain.Product;
 import com.ecommerce.ecommerceWeb.domain.ProductHist;
+import com.ecommerce.ecommerceWeb.exception.ErrorCode;
+import com.ecommerce.ecommerceWeb.exception.GeneralException;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.ropository.ProductHistRepository;
 import com.ecommerce.ecommerceWeb.ropository.ProductRepository;
@@ -10,10 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -22,10 +25,10 @@ public class ProductServiceImpl implements ProductService{
     private ProductHistRepository productHistRepository;
 
     @Override
-    public String addProduct(ProductDto productDto){
+    public String addProduct(ProductDto productDto) {
         String result = "გადაამოწმეთ არსებული პროდუქტები!";
-        Product productExt = productRepository.findByProductAndUserId(productDto.getProduct(),productDto.getUserId());
-        if (productExt == null){
+        Product productExt = productRepository.findByProductAndUserId(productDto.getProduct(), productDto.getUserId());
+        if (productExt == null) {
             Product product = new Product();
             product.setUserId(productDto.getUserId());
             product.setProduct(productDto.getProduct());
@@ -35,24 +38,24 @@ public class ProductServiceImpl implements ProductService{
             product.setStatus("A");
             product = productRepository.save(product);
             //create log
-            createLog(product.getId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD");
+            createLog(product.getId(), productDto.getUserId(), productDto.getProduct(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD");
 
             result = "პროდუქტი წარმატებით დარეგისტრირდა!";
-        }else if(productExt.getStatus().equals("A")){
+        } else if (productExt.getStatus().equals("A")) {
             productExt.setQuantity(productExt.getQuantity() + productDto.getQuantity());
             productRepository.save(productExt);
             //create log
-            createLog(productDto.getProductId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD_CURRENT");
+            createLog(productDto.getProductId(), productDto.getUserId(), productDto.getProduct(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD_CURRENT");
 
             result = "არსებული პროდუქტის რაოდენობა გაიზარდა " + productDto.getQuantity() + "-ით!";
         }
-            return result;
+        return result;
     }
 
-    public String modifyProduct(ProductDto productDto){
-        String result = "შეცდომა!";
-        Product product = productRepository.findByProductAndUserId(productDto.getProduct(),productDto.getUserId());
-        if (product == null){
+    @Override
+    public String modifyProduct(ProductDto productDto) {
+        Product product = productRepository.getProductById(productDto.getProductId());
+        if (product != null && product.getUserId().equals(productDto.getUserId())) {
             product.setProduct(productDto.getProduct());
             product.setPhoto(productDto.getPhoto());
             product.setPrice(productDto.getPrice());
@@ -60,39 +63,61 @@ public class ProductServiceImpl implements ProductService{
             product.setStatus("A");
             productRepository.save(product);
             //create log
-            createLog(product.getId(),productDto.getUserId(),product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"A","MODIFY");
+            createLog(product.getId(), productDto.getUserId(), product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "MODIFY");
 
-            result = "პროდუქტი რედაქტირებულია!";
+            return "პროდუქტი რედაქტირებულია!";
+        } else {
+            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
-            return result;
     }
 
-    public void deleteProducts(Long id, Long userId){
+    @Override
+    public void deleteProducts(Long id, Long userId) {
+        Product product = productRepository.getProductById(id);
+        if (product.getUserId().equals(userId)) {
+            productRepository.deleteById(id);
+            product.setStatus("D");
+            productRepository.save(product);
+            //create log
+            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "D", "DELETE");
+        } else {
+            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+        }
+    }
+
+    @Override
+    public void closeProducts(Long id, Long userId) {
+        Product product = productRepository.getProductById(id);
+        if (product.getUserId().equals(userId)) {
+            product.setStatus("C");
+            productRepository.save(product);
+            //create log
+            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "C", "CLOSE");
+
+        } else {
+            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+        }
+    }
+
+    @Override
+    public void activateProducts(Long id, Long userId) {
         Product product = productRepository.findByIdAndUserId(id, userId);
-        productRepository.deleteById(id);
-        product.setStatus("D");
-        productRepository.save(product);
-        //create log
-        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"D","DELETE");
+        if (product.getUserId().equals(userId)) {
+            product.setStatus("A");
+            productRepository.save(product);
+            //create log
+            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "ACTIVATE");
+        } else {
+            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+        }
     }
 
-    public void closeProducts(Long id, Long userId){
-        Product product = productRepository.findByIdAndUserId(id, userId);
-        product.setStatus("C");
-        productRepository.save(product);
-        //create log
-        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"C","CLOSE");
+    @Override
+    public List<Product> getProducts() {
+       return productRepository.findAll();
     }
 
-    public void activateProducts(Long id, Long userId){
-        Product product = productRepository.findByIdAndUserId(id, userId);
-        product.setStatus("A");
-        productRepository.save(product);
-        //create log
-        createLog(product.getId(),userId,product.getProduct(),product.getPhoto(),product.getPrice(),product.getQuantity(),"A","ACTIVATE");
-    }
-
-    public void createLog(Long productId, Long userId, String product, byte[] photo, Double price, Long quantity, String status, String event){
+    public void createLog(Long productId, Long userId, String product, byte[] photo, Double price, Long quantity, String status, String event) {
         ProductHist productHist = new ProductHist();
         productHist.setProductId(productId);
         productHist.setUserId(userId);
