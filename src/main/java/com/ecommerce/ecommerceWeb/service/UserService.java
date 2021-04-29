@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerceWeb.service;
 
+import com.ecommerce.ecommerceWeb.domain.User;
 import com.ecommerce.ecommerceWeb.model.request.LoginRequest;
 import com.ecommerce.ecommerceWeb.model.request.SignupRequest;
 import org.springframework.http.ResponseEntity;
@@ -19,4 +20,6 @@ String setPassword(Long userId, String password, String rePassword);
     ResponseEntity signIn(LoginRequest loginRequest);
 
     ResponseEntity signUp(SignupRequest signUpRequest);
+
+    User getUserByEmail(String email);
 }

@@ -33,9 +33,9 @@ public class ProductServiceImpl implements ProductService{
             product.setPrice(productDto.getPrice());
             product.setQuantity(productDto.getQuantity());
             product.setStatus("A");
-            productRepository.save(product);
+            product = productRepository.save(product);
             //create log
-            createLog(productDto.getProductId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD");
+            createLog(product.getId(),productDto.getUserId(),productDto.getProduct(),productDto.getPhoto(),productDto.getPrice(),productDto.getQuantity(),"A","ADD");
 
             result = "პროდუქტი წარმატებით დარეგისტრირდა!";
         }else if(productExt.getStatus().equals("A")){

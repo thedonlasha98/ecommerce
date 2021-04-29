@@ -40,7 +40,7 @@ public class EcommerceFacade {
 //    }
 
     public String addProducts(ProductDto productDto){
-        productDto.setUserId(jwtUtils.getUserId());
+        //productDto.setUserId(jwtUtils.getUserId());
         return productService.addProduct(productDto);
     }
 

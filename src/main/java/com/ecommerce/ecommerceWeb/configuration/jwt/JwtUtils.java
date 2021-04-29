@@ -42,10 +42,10 @@ public final class JwtUtils {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
-	public Long getUserId(){
-		String email = getUserNameFromJwtToken(AuthTokenFilter.token);
-		return userRepository.findByEmail(email).get().getId();
-	}
+//	public Long getUserId(){
+//		String email = getUserNameFromJwtToken(AuthTokenFilter.token);
+//		return userRepository.findByEmail(email).get().getId();
+//	}
 
 	public boolean validateJwtToken(String authToken) {
 		try {
