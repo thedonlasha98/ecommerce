@@ -1,10 +1,7 @@
 package com.ecommerce.ecommerceWeb.service;
 
 import com.ecommerce.ecommerceWeb.configuration.jwt.JwtUtils;
-import com.ecommerce.ecommerceWeb.domain.Account;
-import com.ecommerce.ecommerceWeb.domain.ERole;
-import com.ecommerce.ecommerceWeb.domain.Role;
-import com.ecommerce.ecommerceWeb.domain.User;
+import com.ecommerce.ecommerceWeb.domain.*;
 import com.ecommerce.ecommerceWeb.exception.ErrorCode;
 import com.ecommerce.ecommerceWeb.exception.GeneralException;
 import com.ecommerce.ecommerceWeb.model.MailDto;
@@ -13,9 +10,11 @@ import com.ecommerce.ecommerceWeb.model.request.SignupRequest;
 import com.ecommerce.ecommerceWeb.model.response.JwtResponse;
 import com.ecommerce.ecommerceWeb.model.response.MessageResponse;
 import com.ecommerce.ecommerceWeb.ropository.AccountRepository;
+import com.ecommerce.ecommerceWeb.ropository.PasswordRequestRepository;
 import com.ecommerce.ecommerceWeb.ropository.RoleRepository;
 import com.ecommerce.ecommerceWeb.ropository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +33,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Value("${hash.generator.alphabet}")
+    private String hashGeneratorAlphabet;
+
+    @Value("${hash.generator.length}")
+    private int hashGeneratorLength;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -54,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    PasswordRequestRepository passwordRequestRepository;
 
     @Override
     public ResponseEntity signIn(LoginRequest loginRequest) {
@@ -127,22 +136,30 @@ public class UserServiceImpl implements UserService {
                 signUpRequest.getLastName(),
                 signUpRequest.getPin(),
                 signUpRequest.getAcctNo(),
+                (double) 1000,
                 LocalDateTime.now());
 
         accountRepository.save(account);
 
+        String hash = randomString(hashGeneratorLength);
+        PasswordRequest passwordRequest = new PasswordRequest();
+        passwordRequest.setUserId(user.getId());
+        passwordRequest.setHashValue(hash);
+        passwordRequestRepository.save(passwordRequest);
+
         MailDto mailDto = new MailDto();
         mailDto.setEmail(user.getEmail());
         mailDto.setSubject("User Registration");
-        mailDto.setBody("http://localhost:8000/swagger-ui.html#/ecommerce-controller/setPasswordUsingPOST");
+        mailDto.setBody("file:///E:/gitProjects/eCommerceFront/passwords/password.html?hash=" + hash);
         mailService.sendMail(mailDto);
 
         return ResponseEntity.ok(user.getId());
     }
 
     @Override
-    public String setPassword(Long userId, String password, String rePassword) {
+    public String setPassword(String hash, String password, String rePassword) {
         if (password.equals(rePassword)) {
+            Long userId = passwordRequestRepository.getPasswordRequestByHashValue(hash).getUserId();
             User user = userRepository.findById(userId).get();
             user.setPassword(encoder.encode(password));
             userRepository.save(user);
@@ -173,5 +190,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
+    }
+
+    private String randomString(int len) {
+        SecureRandom rnd = new SecureRandom();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(hashGeneratorAlphabet.charAt(rnd.nextInt(hashGeneratorAlphabet.length())));
+        }
+        return sb.toString();
     }
 }

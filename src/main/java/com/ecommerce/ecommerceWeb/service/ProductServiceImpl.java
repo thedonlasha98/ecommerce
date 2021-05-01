@@ -114,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts() {
-       return productRepository.findAll();
+       return productRepository.findAllByStatusOrderByIdDesc("A");
     }
 
     public void createLog(Long productId, Long userId, String product, byte[] photo, Double price, Long quantity, String status, String event) {

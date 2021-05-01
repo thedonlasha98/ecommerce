@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -32,9 +33,9 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-        @PostMapping("/password/")
-    public ResponseEntity<String> setPassword(Long userId, String password, String rePassword){
-        String response = userService.setPassword(userId, password, rePassword);
+        @PostMapping("/password")
+    public ResponseEntity<String> setPassword(String hash, String password, String rePassword){
+        String response = userService.setPassword(hash, password, rePassword);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

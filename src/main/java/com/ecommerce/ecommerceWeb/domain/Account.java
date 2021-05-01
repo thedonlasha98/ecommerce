@@ -34,6 +34,9 @@ public class Account {
     @Column(name = "ACCT_NO")
     private String acctNo;
 
+    @Column(name = "BALANCE")
+    private Double balance;
+
     @Column(name = "REG_DATE")
     private LocalDateTime regDate;
 
@@ -43,12 +46,13 @@ public class Account {
             inverseJoinColumns = @JoinColumn(name = "email"))
     private User user;
 
-    public Account(Long userId, String firstName, String lastName, String pin, String acctNo, LocalDateTime regDate) {
+    public Account(Long userId, String firstName, String lastName, String pin, String acctNo,Double balance, LocalDateTime regDate) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.pin = pin;
         this.acctNo = acctNo;
+        this.balance = balance;
         this.regDate = regDate;
     }
 }

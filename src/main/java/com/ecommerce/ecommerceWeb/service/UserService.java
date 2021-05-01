@@ -11,7 +11,7 @@ public interface UserService {
 
 //    void registerUser(UserDto userDto);
 //
-String setPassword(Long userId, String password, String rePassword);
+String setPassword(String hash, String password, String rePassword);
 //
 //    void authorization(String email, String password);
 //
