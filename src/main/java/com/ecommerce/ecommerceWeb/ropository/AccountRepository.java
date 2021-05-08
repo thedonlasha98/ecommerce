@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends CrudRepository<Account,Long> {
     Account findByPin(String pin);
+
+    Account getAccountByUserId(Long userId);
 }

@@ -2,6 +2,7 @@ package com.ecommerce.ecommerceWeb.controller;
 
 import com.ecommerce.ecommerceWeb.configuration.jwt.AuthTokenFilter;
 import com.ecommerce.ecommerceWeb.facade.EcommerceFacade;
+import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,5 +64,12 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getProducts(){
         List<ProductDto> response = ecommerceFacade.getProducts();
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/buy")
+    public ResponseEntity<?> buyProduct(HttpServletRequest request, BuyProductDto buyProductDto){
+        buyProductDto.setUserId(authTokenFilter.getUserId(request));
+        ecommerceFacade.buyProduct(buyProductDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

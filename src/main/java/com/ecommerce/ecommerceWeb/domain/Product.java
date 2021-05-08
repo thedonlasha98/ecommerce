@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerceWeb.domain;
 
+import com.ecommerce.ecommerceWeb.service.projections.ProductProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,9 @@ public class Product {
 
     @Column(name = "PRODUCT")
     private String product;
+
+    @Column(name = "PRODUCT_NAME")
+    private String productName;
 
     @Column(name = "USER_ID")
     private Long userId;

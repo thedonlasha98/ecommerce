@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerceWeb.facade;
 
 import com.ecommerce.ecommerceWeb.domain.Product;
+import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.service.ProductService;
 import com.ecommerce.ecommerceWeb.service.UserService;
@@ -50,5 +51,9 @@ public class EcommerceFacade {
         return products.stream()
                 .map(ProductDto::transformProducts)
                 .collect(Collectors.toList());
+    }
+
+    public void buyProduct(BuyProductDto buyProductDto) {
+        productService.buyProduct(buyProductDto);
     }
 }

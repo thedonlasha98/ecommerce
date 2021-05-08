@@ -18,12 +18,19 @@ public class UserAuthorization {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_SEQ")
     @Column(name = "ID")
     Long id;
+
     @Column(name = "USER_ID")
     Long userId;
+
     @Column(name = "AUTH_DATE")
     LocalDateTime authDate;
-    @Column(name = "END_DATE")
-    LocalDateTime endDate;
-    @Column(name = "STATUS")
-    String status;
+
+    @Column(name = "TOKEN_ID")
+    String tokenId;
+
+    public UserAuthorization(Long userId, LocalDateTime authDate, String tokenId) {
+        this.userId = userId;
+        this.authDate = authDate;
+        this.tokenId = tokenId;
+    }
 }

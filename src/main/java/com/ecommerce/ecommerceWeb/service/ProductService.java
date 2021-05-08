@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerceWeb.service;
 
 import com.ecommerce.ecommerceWeb.domain.Product;
+import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,6 @@ public interface ProductService {
     String modifyProduct(ProductDto productDto);
 
     List<Product> getProducts();
+
+    void buyProduct(BuyProductDto buyProductDto);
 }

@@ -8,11 +8,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ECOM_PRODUCTS_HIST")
+@Table(name = "ECOM_PRODUCTS_TRANSACTIONS")
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductHist {
+public class ProductsTransaction {
     @Id
     @SequenceGenerator(name = "ECOM_SEQ", sequenceName = "ECOM_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_SEQ")
@@ -22,32 +22,22 @@ public class ProductHist {
     @Column(name = "PRODUCT_ID")
     private Long productId;
 
-    @Column(name = "PRODUCT")
-    private String product;
+    @Column(name = "FROM_ACCT_ID")
+    private Long fromAcctId;
 
-    @Column(name = "PRODUCT_NAME")
-    private String productName;
-
-    @Column(name = "USER_ID")
-    private Long userId;
-
-    @Lob
-    @Column(name = "PHOTO", columnDefinition="BLOB")
-    private byte[] photo;
-
-    @Column(name = "PRICE")
-    private Double price;
-
-    @Column(name = "STATUS")
-    private String status;
+    @Column(name = "TO_ACCT_ID")
+    private Long toAcctId;
 
     @Column(name = "QUANTITY")
     private Long quantity;
 
-    @Column(name = "EVENT")
-    private String event;
+    @Column(name = "AMOUNT")
+    private double amount;
+
+    @Column(name = "COM_AMOUNT")
+    private double comAmount;
 
     @Column(name = "INP_SYSDATE")
-    private LocalDateTime inpSysDate;
+    private LocalDateTime inpSysdate;
 
 }

@@ -15,6 +15,8 @@ public class ProductDto {
 
     private String product;
 
+    private String productName;
+
     private Long userId;
 
     private byte[] photo;
@@ -29,6 +31,7 @@ public class ProductDto {
         return ProductDto.builder()
                 .productId(product.getId())
                 .product(product.getProduct())
+                .productName(product.getProductName())
                 .userId(product.getUserId())
                 .photo(product.getPhoto())
                 .price(product.getPrice())

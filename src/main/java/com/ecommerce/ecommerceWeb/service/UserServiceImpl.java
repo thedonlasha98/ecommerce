@@ -9,10 +9,7 @@ import com.ecommerce.ecommerceWeb.model.request.LoginRequest;
 import com.ecommerce.ecommerceWeb.model.request.SignupRequest;
 import com.ecommerce.ecommerceWeb.model.response.JwtResponse;
 import com.ecommerce.ecommerceWeb.model.response.MessageResponse;
-import com.ecommerce.ecommerceWeb.ropository.AccountRepository;
-import com.ecommerce.ecommerceWeb.ropository.PasswordRequestRepository;
-import com.ecommerce.ecommerceWeb.ropository.RoleRepository;
-import com.ecommerce.ecommerceWeb.ropository.UserRepository;
+import com.ecommerce.ecommerceWeb.ropository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +61,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordRequestRepository passwordRequestRepository;
 
+    @Autowired
+    UserAuthorizationRepository userAuthorizationRepository;
+
     @Override
     public ResponseEntity signIn(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -71,6 +71,9 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserAuthorization userAuth = new UserAuthorization(userRepository.getUserByEmail(loginRequest.getEmail()).getId(), LocalDateTime.now(), jwt);
+        userAuthorizationRepository.save(userAuth);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()

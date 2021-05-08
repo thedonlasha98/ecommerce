@@ -1,10 +1,13 @@
 package com.ecommerce.ecommerceWeb.service;
 
+import com.ecommerce.ecommerceWeb.domain.Account;
 import com.ecommerce.ecommerceWeb.domain.Product;
 import com.ecommerce.ecommerceWeb.domain.ProductHist;
 import com.ecommerce.ecommerceWeb.exception.ErrorCode;
 import com.ecommerce.ecommerceWeb.exception.GeneralException;
+import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
+import com.ecommerce.ecommerceWeb.ropository.AccountRepository;
 import com.ecommerce.ecommerceWeb.ropository.ProductHistRepository;
 import com.ecommerce.ecommerceWeb.ropository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -23,6 +27,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductHistRepository productHistRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public String addProduct(ProductDto productDto) {
@@ -38,14 +45,14 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("A");
             product = productRepository.save(product);
             //create log
-            createLog(product.getId(), productDto.getUserId(), productDto.getProduct(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD");
+            createLog(product.getId(), productDto.getUserId(), productDto.getProduct(),  productDto.getProductName(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD");
 
             result = "პროდუქტი წარმატებით დარეგისტრირდა!";
         } else if (productExt.getStatus().equals("A")) {
             productExt.setQuantity(productExt.getQuantity() + productDto.getQuantity());
             productRepository.save(productExt);
             //create log
-            createLog(productDto.getProductId(), productDto.getUserId(), productDto.getProduct(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD_CURRENT");
+            createLog(productDto.getProductId(), productDto.getUserId(), productDto.getProduct(), productDto.getProductName(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD_CURRENT");
 
             result = "არსებული პროდუქტის რაოდენობა გაიზარდა " + productDto.getQuantity() + "-ით!";
         }
@@ -63,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("A");
             productRepository.save(product);
             //create log
-            createLog(product.getId(), productDto.getUserId(), product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "MODIFY");
+            createLog(product.getId(), productDto.getUserId(), product.getProduct(), productDto.getProductName(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "MODIFY");
 
             return "პროდუქტი რედაქტირებულია!";
         } else {
@@ -79,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("D");
             productRepository.save(product);
             //create log
-            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "D", "DELETE");
+            createLog(product.getId(), userId, product.getProduct(), product.getProductName(), product.getPhoto(), product.getPrice(), product.getQuantity(), "D", "DELETE");
         } else {
             throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
@@ -92,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("C");
             productRepository.save(product);
             //create log
-            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "C", "CLOSE");
+            createLog(product.getId(), userId, product.getProduct(),product.getProductName(), product.getPhoto(), product.getPrice(), product.getQuantity(), "C", "CLOSE");
 
         } else {
             throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
@@ -106,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("A");
             productRepository.save(product);
             //create log
-            createLog(product.getId(), userId, product.getProduct(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "ACTIVATE");
+            createLog(product.getId(), userId, product.getProduct(),product.getProductName(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "ACTIVATE");
         } else {
             throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
@@ -117,11 +124,20 @@ public class ProductServiceImpl implements ProductService {
        return productRepository.findAllByStatusOrderByIdDesc("A");
     }
 
-    public void createLog(Long productId, Long userId, String product, byte[] photo, Double price, Long quantity, String status, String event) {
+    @Override
+    public void buyProduct(BuyProductDto buyProductDto) {
+        Product product = productRepository.getProductById(buyProductDto.getProductId());
+        Account ownersAccount = accountRepository.getAccountByUserId(product.getUserId());
+        Account buyersAccount = accountRepository.getAccountByUserId(buyProductDto.getUserId());
+
+    }
+
+    public void createLog(Long productId, Long userId, String product, String productName, byte[] photo, Double price, Long quantity, String status, String event) {
         ProductHist productHist = new ProductHist();
         productHist.setProductId(productId);
         productHist.setUserId(userId);
         productHist.setProduct(product);
+        productHist.setProductName(productName);
         productHist.setPhoto(photo);
         productHist.setPrice(price);
         productHist.setQuantity(quantity);
