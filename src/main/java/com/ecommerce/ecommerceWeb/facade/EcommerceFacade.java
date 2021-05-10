@@ -5,11 +5,15 @@ import com.ecommerce.ecommerceWeb.exception.ErrorCode;
 import com.ecommerce.ecommerceWeb.exception.GeneralException;
 import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
-import com.ecommerce.ecommerceWeb.service.ProductService;
-import com.ecommerce.ecommerceWeb.service.UserService;
+import com.ecommerce.ecommerceWeb.service.*;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +24,15 @@ import java.util.stream.Collectors;
  */
 @Component
 public class EcommerceFacade {
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ExcelReportService excelReportService;
+
+    @Autowired
+    private MailService mailService;
 
     public String addProducts(ProductDto productDto) {
         return productService.addProduct(productDto);
@@ -65,5 +73,19 @@ public class EcommerceFacade {
         else{
             throw new GeneralException(ErrorCode.INCORRECT_CARD_CREDENTIALS);
         }
+    }
+
+    @SneakyThrows
+    @Scheduled(cron = "0 0 0 * * *")
+    public void fixedRateSch() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        Date now = new Date();
+        String strDate = sdf.format(now);
+        ExcelExporter excelExporter = new ExcelExporter(excelReportService.getExcelData(), excelReportService.getTransactions());
+        excelExporter.export();
+        EmailHelper emailHelper = new EmailHelper();
+        emailHelper.sendEmail();
+        //mailService.sendMailWithAttachment("thedonlasha@gmail.com","report", "daily report",excelExporter.export());
     }
 }
