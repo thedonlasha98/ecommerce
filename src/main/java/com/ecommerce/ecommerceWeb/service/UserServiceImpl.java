@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         MailDto mailDto = new MailDto();
         mailDto.setEmail(user.getEmail());
         mailDto.setSubject("User Registration");
-        mailDto.setBody("file:///E:/gitProjects/eCommerceFront/passwords/password.html?hash=" + hash);
+        mailDto.setBody("http://127.0.0.1:5500/passwords/password.html?hash=" + hash);
         mailService.sendMail(mailDto);
 
         return ResponseEntity.ok(user.getId());

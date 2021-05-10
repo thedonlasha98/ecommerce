@@ -17,4 +17,10 @@ public class BuyProductDto {
 
     private Long quantity;
 
+    private Long cardNo;
+
+    private String expDate;
+
+    private int cvv;
+
 }

@@ -18,7 +18,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class Account {
+
     @Id
+    @SequenceGenerator(name = "ECOM_SEQ", sequenceName = "ECOM_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_SEQ")
+    @Column(name = "ID")
+    private Long id;
+
     @Column(name = "USER_ID")
     private Long userId;
 

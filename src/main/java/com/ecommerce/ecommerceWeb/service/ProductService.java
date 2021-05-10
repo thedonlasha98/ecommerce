@@ -4,6 +4,7 @@ import com.ecommerce.ecommerceWeb.domain.Product;
 import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,5 +22,6 @@ public interface ProductService {
 
     List<Product> getProducts();
 
+    @Transactional
     void buyProduct(BuyProductDto buyProductDto);
 }

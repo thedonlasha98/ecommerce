@@ -1,6 +1,8 @@
 package com.ecommerce.ecommerceWeb.facade;
 
 import com.ecommerce.ecommerceWeb.domain.Product;
+import com.ecommerce.ecommerceWeb.exception.ErrorCode;
+import com.ecommerce.ecommerceWeb.exception.GeneralException;
 import com.ecommerce.ecommerceWeb.model.BuyProductDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.service.ProductService;
@@ -54,6 +56,14 @@ public class EcommerceFacade {
     }
 
     public void buyProduct(BuyProductDto buyProductDto) {
-        productService.buyProduct(buyProductDto);
+        if (String.valueOf(buyProductDto.getCardNo()).length() == 16 &&
+                String.valueOf(buyProductDto.getCvv()).length() == 3 &&
+                buyProductDto.getExpDate().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")
+        ) {
+            productService.buyProduct(buyProductDto);
+        }
+        else{
+            throw new GeneralException(ErrorCode.INCORRECT_CARD_CREDENTIALS);
+        }
     }
 }

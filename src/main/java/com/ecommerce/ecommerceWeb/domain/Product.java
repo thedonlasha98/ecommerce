@@ -1,6 +1,5 @@
 package com.ecommerce.ecommerceWeb.domain;
 
-import com.ecommerce.ecommerceWeb.service.projections.ProductProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
