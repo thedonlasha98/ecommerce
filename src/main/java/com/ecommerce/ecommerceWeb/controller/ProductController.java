@@ -25,28 +25,28 @@ public class ProductController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(HttpServletRequest request, ProductDto productDto) {
-        productDto.setUserId(authTokenFilter.getUserId(request));
+        //productDto.setUserId(authTokenFilter.getUserId(request));
         String response = ecommerceFacade.addProducts(productDto);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/activate/{id}")
-    public ResponseEntity<?> activateProducts(HttpServletRequest request, @PathVariable Long id) {
-        ecommerceFacade.activateProducts(id, authTokenFilter.getUserId(request));
+    public ResponseEntity<?> activateProducts(HttpServletRequest request, Long userId, @PathVariable Long id) {
+        ecommerceFacade.activateProducts(id, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/close/{id}")
-    public ResponseEntity<?> closeProducts(HttpServletRequest request, @PathVariable Long id) {
-        ecommerceFacade.closeProducts(id, authTokenFilter.getUserId(request));
+    public ResponseEntity<?> closeProducts(HttpServletRequest request,Long userId, @PathVariable Long id) {
+        ecommerceFacade.closeProducts(id, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProducts(HttpServletRequest request, @PathVariable Long id) {
+    public ResponseEntity<?> deleteProducts(HttpServletRequest request, Long userId, @PathVariable Long id) {
         ecommerceFacade.deleteProducts(id, authTokenFilter.getUserId(request));
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,7 +54,7 @@ public class ProductController {
 
     @PostMapping("/modify")
     public ResponseEntity<String> modifyProduct(HttpServletRequest request, ProductDto productDto) {
-        productDto.setUserId(authTokenFilter.getUserId(request));
+        //productDto.setUserId(authTokenFilter.getUserId(request));
         String response = ecommerceFacade.modifyProduct(productDto);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -62,13 +62,14 @@ public class ProductController {
 
     @GetMapping("/get-all")
     public ResponseEntity<List<ProductDto>> getProducts(){
+
         List<ProductDto> response = ecommerceFacade.getProducts();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PostMapping("/buy")
     public ResponseEntity<?> buyProduct(HttpServletRequest request, BuyProductDto buyProductDto){
-        buyProductDto.setUserId(authTokenFilter.getUserId(request));
+        //buyProductDto.setUserId(authTokenFilter.getUserId(request));
         ecommerceFacade.buyProduct(buyProductDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
