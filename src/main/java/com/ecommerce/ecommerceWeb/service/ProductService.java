@@ -12,11 +12,11 @@ import java.util.List;
 public interface ProductService {
     String addProduct(ProductDto productDto);
 
-    void activateProducts(Long id, Long userId);
+    void activateProduct(Long id, Long userId);
 
-    void closeProducts(Long id, Long userId);
+    void closeProduct(Long id, Long userId);
 
-    void deleteProducts(Long id, Long userId);
+    void deleteProduct(Long id, Long userId);
 
     String modifyProduct(ProductDto productDto);
 

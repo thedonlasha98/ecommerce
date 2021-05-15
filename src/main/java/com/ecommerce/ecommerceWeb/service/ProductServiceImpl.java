@@ -21,6 +21,7 @@ import java.util.List;
 
 import static java.math.BigDecimal.ZERO;
 
+@SuppressWarnings("Unchecked")
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -36,10 +37,10 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductsTransactionRepository productsTransactionRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String addProduct(ProductDto productDto) {
-        String result = "გადაამოწმეთ არსებული პროდუქტები!";
+        String result = "Check current products!";
         Product productExt = productRepository.findByProductAndUserId(productDto.getProduct(), productDto.getUserId());
         if (productExt == null) {
             Product product = new Product();
@@ -53,19 +54,19 @@ public class ProductServiceImpl implements ProductService {
             //create log
             createLog(product.getId(), productDto.getUserId(), productDto.getProduct(), productDto.getProductName(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD");
 
-            result = "პროდუქტი წარმატებით დარეგისტრირდა!";
+            result = "Product is registered successfully!";
         } else if (productExt.getStatus().equals("A")) {
             productExt.setQuantity(productExt.getQuantity() + productDto.getQuantity());
             productRepository.save(productExt);
             //create log
             createLog(productDto.getProductId(), productDto.getUserId(), productDto.getProduct(), productDto.getProductName(), productDto.getPhoto(), productDto.getPrice(), productDto.getQuantity(), "A", "ADD_CURRENT");
 
-            result = "არსებული პროდუქტის რაოდენობა გაიზარდა " + productDto.getQuantity() + "-ით!";
+            result = "Current product quantity Increased by " + productDto.getQuantity() + "!";
         }
         return result;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String modifyProduct(ProductDto productDto) {
         Product product = productRepository.getProductById(productDto.getProductId());
@@ -79,15 +80,15 @@ public class ProductServiceImpl implements ProductService {
             //create log
             createLog(product.getId(), productDto.getUserId(), product.getProduct(), productDto.getProductName(), product.getPhoto(), product.getPrice(), product.getQuantity(), "A", "MODIFY");
 
-            return "პროდუქტი რედაქტირებულია!";
+            return "Product is modify!";
         } else {
             throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteProducts(Long id, Long userId) {
+    public void deleteProduct(Long id, Long userId) {
         Product product = productRepository.getProductById(id);
         if (product.getUserId().equals(userId)) {
             productRepository.deleteById(id);
@@ -100,9 +101,9 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void closeProducts(Long id, Long userId) {
+    public void closeProduct(Long id, Long userId) {
         Product product = productRepository.getProductById(id);
         if (product.getUserId().equals(userId)) {
             product.setStatus("C");
@@ -115,9 +116,9 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void activateProducts(Long id, Long userId) {
+    public void activateProduct(Long id, Long userId) {
         Product product = productRepository.findByIdAndUserId(id, userId);
         if (product.getUserId().equals(userId)) {
             product.setStatus("A");
@@ -178,7 +179,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void createLog(Long productId, Long userId, String product, String productName, byte[] photo, Double price, Long quantity, String status, String event) {
         ProductHist productHist = new ProductHist();
         productHist.setProductId(productId);

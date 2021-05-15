@@ -37,6 +37,9 @@ public class UserServiceImpl implements UserService {
     @Value("${hash.generator.length}")
     private int hashGeneratorLength;
 
+    @Value("${web.front.url}")
+    private String webUrl;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -153,7 +156,7 @@ public class UserServiceImpl implements UserService {
         MailDto mailDto = new MailDto();
         mailDto.setEmail(user.getEmail());
         mailDto.setSubject("User Registration");
-        mailDto.setBody("http://127.0.0.1:5500/passwords/password.html?hash=" + hash);
+        mailDto.setBody(webUrl + "passwords/password.html?hash=" + hash);
         mailService.sendMail(mailDto);
 
         return ResponseEntity.ok(user.getId());
@@ -177,10 +180,17 @@ public class UserServiceImpl implements UserService {
     public String resetPassword(String pin) {
         Account account = accountRepository.findByPin(pin);
         if (account != null) {
+
+            String hash = randomString(hashGeneratorLength);
+            PasswordRequest passwordRequest = new PasswordRequest();
+            passwordRequest.setUserId(account.getUserId());
+            passwordRequest.setHashValue(hash);
+            passwordRequestRepository.save(passwordRequest);
+
             MailDto mailDto = new MailDto();
             mailDto.setEmail(account.getUser().getEmail());
             mailDto.setSubject("Reset password");
-            mailDto.setBody("http://localhost:8090/swagger-ui.html#/ecommerce-controller/setPasswordUsingPOST");
+            mailDto.setBody(webUrl + "passwords/password.html?hash=" + hash);
             mailService.sendMail(mailDto);
 
             return "პაროლის შესაცვლელ ლინკს მიიღებთ მეილზე " + account.getUser().getEmail();

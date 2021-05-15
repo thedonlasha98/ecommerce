@@ -34,20 +34,20 @@ public class EcommerceFacade {
     @Autowired
     private MailService mailService;
 
-    public String addProducts(ProductDto productDto) {
+    public String addProduct(ProductDto productDto) {
         return productService.addProduct(productDto);
     }
 
-    public void activateProducts(Long id, Long userId) {
-        productService.activateProducts(id, userId);
+    public void activateProduct(Long id, Long userId) {
+        productService.activateProduct(id, userId);
     }
 
-    public void closeProducts(Long id, Long userId) {
-        productService.closeProducts(id, userId);
+    public void closeProduct(Long id, Long userId) {
+        productService.closeProduct(id, userId);
     }
 
-    public void deleteProducts(Long id, Long userId) {
-        productService.deleteProducts(id, userId);
+    public void deleteProduct(Long id, Long userId) {
+        productService.deleteProduct(id, userId);
     }
 
     public String modifyProduct(ProductDto productDto) {
