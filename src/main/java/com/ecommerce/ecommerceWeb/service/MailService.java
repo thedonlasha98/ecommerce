@@ -10,5 +10,5 @@ import java.io.FileOutputStream;
 public interface MailService {
     void sendMail(MailDto mailDto);
 
-    void sendMailWithAttachment(String to, String subject, String body, FileOutputStream fileToAttach);
+    void sendMailWithAttachment(MailDto mailDto);
 }

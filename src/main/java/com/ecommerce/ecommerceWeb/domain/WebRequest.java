@@ -3,6 +3,7 @@ package com.ecommerce.ecommerceWeb.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,6 +26,6 @@ public class WebRequest {
     private String ipAddress;
 
     @Column(name = "INP_SYSDATE")
-    private LocalDateTime inpSysdate;
+    private LocalDate inpSysdate;
 
 }

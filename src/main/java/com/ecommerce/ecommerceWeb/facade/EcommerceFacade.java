@@ -4,6 +4,7 @@ import com.ecommerce.ecommerceWeb.domain.Product;
 import com.ecommerce.ecommerceWeb.exception.ErrorCode;
 import com.ecommerce.ecommerceWeb.exception.GeneralException;
 import com.ecommerce.ecommerceWeb.model.BuyProductDto;
+import com.ecommerce.ecommerceWeb.model.MailDto;
 import com.ecommerce.ecommerceWeb.model.ProductDto;
 import com.ecommerce.ecommerceWeb.service.*;
 import lombok.SneakyThrows;
@@ -76,16 +77,22 @@ public class EcommerceFacade {
     }
 
     @SneakyThrows
-    @Scheduled(cron = "0 0 0 * * *")
-    public void fixedRateSch() {
+    @Scheduled(cron = "0 30 2 * * *")
+    public void excelReportScheduler() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
         Date now = new Date();
         String strDate = sdf.format(now);
         ExcelExporter excelExporter = new ExcelExporter(excelReportService.getExcelData(), excelReportService.getTransactions());
         excelExporter.export();
-        EmailHelper emailHelper = new EmailHelper();
-        emailHelper.sendEmail();
-        //mailService.sendMailWithAttachment("thedonlasha@gmail.com","report", "daily report",excelExporter.export());
+
+        MailDto mailDto = MailDto.builder()
+                .email("bolgalasha@gmail.com")
+                .subject("Daily Report")
+                .body("Daily Report")
+                .fileAttach("report.xlsx")
+                .build();
+
+        mailService.sendMailWithAttachment(mailDto);
     }
 }

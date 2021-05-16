@@ -8,26 +8,13 @@ import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFBuiltinTableStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
-import java.util.Properties;
 
 public class ExcelExporter {
 
@@ -59,12 +46,13 @@ public class ExcelExporter {
         createCell(row, 2, "Commis income", style);
         createCell(row, 3, "Add Product count", style);
         createCell(row, 4, "user count", style);
+        createCell(row, 5, "request count", style);
 
-        createCell(row, 6, "product", style);
-        createCell(row, 7, "productName", style);
-        createCell(row, 8, "amount", style);
-        createCell(row, 9, "buyer's email", style);
-        createCell(row, 10, "buyer's pin", style);
+        createCell(row, 7, "product", style);
+        createCell(row, 8, "productName", style);
+        createCell(row, 9, "amount", style);
+        createCell(row, 10, "buyer's email", style);
+        createCell(row, 11, "buyer's pin", style);
 
     }
 
@@ -96,12 +84,13 @@ public class ExcelExporter {
             createCell(row, columnCount++, excelData.getTransCount(), style);
             createCell(row, columnCount++, excelData.getSumAmount(), style);
             createCell(row, columnCount++, excelData.getComAmount(), style);
-            createCell(row, columnCount++, excelData.getProdCount().toString(), style);
+            createCell(row, columnCount++, excelData.getProdCount(), style);
             createCell(row, columnCount++, excelData.getUserCount(), style);
+            createCell(row, columnCount++, excelData.getRequestCount(), style);
 
         for (ExcelTransProjection trans : transactionsList) {
             Row transRow = sheet.createRow(rowCount++);
-            columnCount = 6;
+            columnCount = 7;
 
             createCell(transRow, columnCount++, trans.getProduct(), style);
             createCell(transRow, columnCount++, trans.getProductName(), style);

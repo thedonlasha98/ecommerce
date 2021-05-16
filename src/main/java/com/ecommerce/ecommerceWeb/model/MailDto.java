@@ -1,9 +1,16 @@
 package com.ecommerce.ecommerceWeb.model;
 
+import lombok.*;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MailDto {
     @NotNull
     private String subject;
@@ -16,27 +23,6 @@ public class MailDto {
     @Min(10)
     private String body;
 
-    public String getSubject() {
-        return subject;
-    }
+    private String fileAttach;
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
 }

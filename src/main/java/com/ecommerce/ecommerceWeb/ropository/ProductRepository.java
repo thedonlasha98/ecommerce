@@ -5,12 +5,11 @@ import com.ecommerce.ecommerceWeb.service.projection.ExcelProjection;
 import com.ecommerce.ecommerceWeb.service.projection.ExcelTransProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findByProductAndUserId(String product, Long userId);
 
     Product findByIdAndUserId(Long id, Long userId);
@@ -19,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findAllByStatusOrderByIdDesc(String status);
 
-    @Query(value = "select t.transCount,t.sumAmount,t.comAmount, h.prodCount, a.userCount" +
+    @Query(value = "select t.transCount,t.sumAmount,t.comAmount, h.prodCount, a.userCount, r.requestCount" +
             "                      from (select nvl(count(t.id), 0) as transCount," +
             "                                   nvl(sum(t.amount), 0) as sumAmount," +
             "                                   nvl(sum(t.com_amount), 0) as comAmount" +
@@ -31,7 +30,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "                                   h.event in ('ADD', 'ADD_CURRENT'))) h," +
             "                           (select nvl(count(distinct(a.user_id)), 0) as userCount" +
             "                              from ecom_user_authorizations a" +
-            "                             where trunc(a.auth_date) = :date) a",nativeQuery = true)
+            "                             where trunc(a.auth_date) = :date) a," +
+            "                           (select nvl(count(distinct(r.ip_address)), 0) as requestCount" +
+            "                              from ecom_web_requests r" +
+            "                             where r.INP_SYSDATE = :date) r", nativeQuery = true)
     ExcelProjection getExelQueryData(LocalDate date);
 
     @Query(value = "  select p.product as product" +
@@ -46,7 +48,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             " where t.product_id = p.id" +
             "     and t.from_acct_id = a.id" +
             "     and a.user_id = u.id" +
-            "     and trunc(t.inp_sysdate) = :date - 1",nativeQuery = true)
+            "     and trunc(t.inp_sysdate) = :date - 1", nativeQuery = true)
     List<ExcelTransProjection> getTransactionToday(LocalDate date);
 
 }

@@ -10,4 +10,6 @@ public interface ExcelProjection {
     Integer getProdCount();
 
     Integer getUserCount();
+
+    Integer getRequestCount();
 }
