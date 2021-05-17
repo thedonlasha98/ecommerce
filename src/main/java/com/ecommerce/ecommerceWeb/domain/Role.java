@@ -6,11 +6,12 @@ import javax.persistence.*;
 @Table(name = "roles")
 public class Role {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@SequenceGenerator(name = "ECOM_SEQ", sequenceName = "ECOM_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ECOM_SEQ")
+	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length = 20)
+	@Column(name = "NAME", length = 20)
 	private ERole name;
 
 	public Role() {
@@ -21,11 +22,11 @@ public class Role {
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

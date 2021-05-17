@@ -55,15 +55,15 @@ public class MailServiceImpl implements MailService{
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.host", emailCfg.getHost());
+            props.put("mail.smtp.port", emailCfg.getPort());
 
             Session session = Session.getInstance(props, new javax.mail.Authenticator()
             {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication()
                 {
-                    return new PasswordAuthentication("thedonlasha@gmail.com", "lasha111");
+                    return new PasswordAuthentication(emailCfg.getUsername(), emailCfg.getPassword());
                 }
             });
             Message msg = new MimeMessage(session);
@@ -71,7 +71,7 @@ public class MailServiceImpl implements MailService{
 
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(mailDto.getEmail()));
-            msg.setSubject("daily report");
+            msg.setSubject(mailDto.getSubject());
             msg.setSentDate(new Date());
 
             MimeBodyPart messageBodyPart = new MimeBodyPart();
