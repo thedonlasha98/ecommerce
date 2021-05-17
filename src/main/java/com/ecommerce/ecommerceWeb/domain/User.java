@@ -29,9 +29,6 @@ public class User {
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "id"),
-				inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<Role> roles = new HashSet<>();
 
 	public User() {

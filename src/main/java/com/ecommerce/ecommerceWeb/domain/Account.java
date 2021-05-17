@@ -47,9 +47,6 @@ public class Account {
     private LocalDateTime regDate;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(	name = "ECOM_USERS",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
 
     public Account(Long userId, String firstName, String lastName, String pin, String acctNo,Double balance, LocalDateTime regDate) {
