@@ -25,7 +25,7 @@ public class Account {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "USER_ID")
+    @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
     @Column(name = "FIRST_NAME")
@@ -46,7 +46,8 @@ public class Account {
     @Column(name = "REG_DATE")
     private LocalDateTime regDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(optional=false)
+    @JoinColumn(referencedColumnName="id", insertable=false, updatable=false)
     private User user;
 
     public Account(Long userId, String firstName, String lastName, String pin, String acctNo,Double balance, LocalDateTime regDate) {
