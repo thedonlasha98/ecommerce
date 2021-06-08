@@ -153,11 +153,11 @@ public class UserServiceImpl implements UserService {
         passwordRequest.setHashValue(hash);
         passwordRequestRepository.save(passwordRequest);
 
-        MailDto mailDto = new MailDto();
-        mailDto.setEmail(user.getEmail());
-        mailDto.setSubject("User Registration");
-        mailDto.setBody(webUrl + "passwords/password.html?hash=" + hash);
-        mailService.sendMail(mailDto);
+        mailService.sendMail(MailDto.builder()
+                .email(user.getEmail())
+                .subject("User Registration")
+                .body(webUrl + "passwords/password.html?hash=" + hash)
+                .build());
 
         return ResponseEntity.ok(user.getId());
     }
