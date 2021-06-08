@@ -1,19 +1,16 @@
 package com.ecommerce.ecommerceWeb.facade;
 
-import com.ecommerce.ecommerceWeb.service.MailService;
 import com.ecommerce.ecommerceWeb.service.projection.ExcelProjection;
 import com.ecommerce.ecommerceWeb.service.projection.ExcelTransProjection;
-import com.sun.istack.ByteArrayDataSource;
-import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFBuiltinTableStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class ExcelExporter {
@@ -63,7 +60,7 @@ public class ExcelExporter {
             cell.setCellValue((Integer) value);
         } else if (value instanceof Double) {
             cell.setCellValue((Double) value);
-        }else {
+        } else {
             cell.setCellValue((String) value);
         }
         cell.setCellStyle(style);
@@ -78,15 +75,15 @@ public class ExcelExporter {
         style.setFont(font);
 
 
-            Row row = sheet.createRow(rowCount);
-            int columnCount = 0;
+        Row row = sheet.createRow(rowCount);
+        int columnCount = 0;
 
-            createCell(row, columnCount++, excelData.getTransCount(), style);
-            createCell(row, columnCount++, excelData.getSumAmount(), style);
-            createCell(row, columnCount++, excelData.getComAmount(), style);
-            createCell(row, columnCount++, excelData.getProdCount(), style);
-            createCell(row, columnCount++, excelData.getUserCount(), style);
-            createCell(row, columnCount++, excelData.getRequestCount(), style);
+        createCell(row, columnCount++, excelData.getTransCount(), style);
+        createCell(row, columnCount++, excelData.getSumAmount(), style);
+        createCell(row, columnCount++, excelData.getComAmount(), style);
+        createCell(row, columnCount++, excelData.getProdCount(), style);
+        createCell(row, columnCount++, excelData.getUserCount(), style);
+        createCell(row, columnCount++, excelData.getRequestCount(), style);
 
         for (ExcelTransProjection trans : transactionsList) {
             Row transRow = sheet.createRow(rowCount++);
@@ -102,15 +99,15 @@ public class ExcelExporter {
 
     }
 
-    @SneakyThrows
-    public void export() throws IOException {
-
+    public void export() {
         writeHeaderLine();
         writeDataLines();
 
-        FileOutputStream out = new FileOutputStream(new File("report.xlsx"));
-        workbook.write(out);
-        out.close();
+        try (FileOutputStream out = new FileOutputStream(new File("report.xlsx"))) {
+            workbook.write(out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("report.xlsx written successfully on disk.");
     }
 }
