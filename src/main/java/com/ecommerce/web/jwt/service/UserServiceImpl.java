@@ -1,11 +1,12 @@
 package com.ecommerce.web.jwt.service;
 
 import com.ecommerce.web.domain.*;
-import com.ecommerce.web.exception.ErrorCode;
+import com.ecommerce.web.exception.ErrorMessage;
 import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.jwt.config.JwtUtils;
 import com.ecommerce.web.jwt.request.LoginRequest;
 import com.ecommerce.web.jwt.request.SignupRequest;
+import com.ecommerce.web.jwt.response.JwtException;
 import com.ecommerce.web.jwt.response.JwtResponse;
 import com.ecommerce.web.jwt.response.MessageResponse;
 import com.ecommerce.web.model.MailDto;
@@ -28,6 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.ecommerce.web.jwt.response.JwtMessage.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -101,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse(EMAIL_IS_ALREADY_IN_USE.getDesc()));
         }
 
         // Create new user's account
@@ -112,26 +115,26 @@ public class UserServiceImpl implements UserService {
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new JwtException(ROLE_IS_NOT_FOUND));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new JwtException(ROLE_IS_NOT_FOUND));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
                         Role modRole = roleRepository.findByName(ERole.MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new JwtException(ROLE_IS_NOT_FOUND));
                         roles.add(modRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new JwtException(ROLE_IS_NOT_FOUND));
                         roles.add(userRole);
                 }
             });
@@ -178,7 +181,7 @@ public class UserServiceImpl implements UserService {
 
             return "თქვენ წარამტებით დააყენეთ პაროლი!";
         } else {
-            throw new GeneralException(ErrorCode.PASSWORD_NOT_EQUALS);
+            throw new JwtException(PASSWORD_NOT_EQUALS);
         }
     }
 
@@ -201,7 +204,7 @@ public class UserServiceImpl implements UserService {
 
             return "პაროლის შესაცვლელ ლინკს მიიღებთ მეილზე " + account.getUser().getEmail();
         } else {
-            throw new GeneralException(ErrorCode.INCORRECT_CREDENTIALS);
+            throw new JwtException(INCORRECT_CREDENTIALS);
         }
 
     }

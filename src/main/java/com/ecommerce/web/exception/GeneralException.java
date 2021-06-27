@@ -1,17 +1,22 @@
 package com.ecommerce.web.exception;
 
 public class GeneralException extends RuntimeException {
-    ErrorCode errorCode;
 
-    public GeneralException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
+    private String errorMessage;
+
+    public GeneralException(ErrorMessage errorMessage) {
+        this.errorMessage = errorMessage.getDescription();
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
+    public GeneralException(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
-    public void setErrorCode(ErrorCode errorCode) {
-        this.errorCode = errorCode;
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

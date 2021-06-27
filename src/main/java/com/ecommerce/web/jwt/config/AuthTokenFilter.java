@@ -1,6 +1,6 @@
 package com.ecommerce.web.jwt.config;
 
-import com.ecommerce.web.exception.ErrorCode;
+import com.ecommerce.web.exception.ErrorMessage;
 import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.jwt.service.UserDetailsServiceImpl;
 import com.ecommerce.web.jwt.service.UserService;
@@ -62,7 +62,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		return userService.getUserByEmail(username).getId();
 		}
 		else {
-			throw new GeneralException(ErrorCode.NOT_FOUND);
+			throw new GeneralException(ErrorMessage.NOT_FOUND);
 		}
 	}
 

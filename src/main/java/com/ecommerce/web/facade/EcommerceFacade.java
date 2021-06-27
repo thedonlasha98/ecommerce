@@ -1,7 +1,7 @@
 package com.ecommerce.web.facade;
 
 import com.ecommerce.web.domain.Product;
-import com.ecommerce.web.exception.ErrorCode;
+import com.ecommerce.web.exception.ErrorMessage;
 import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.model.BuyProductDto;
 import com.ecommerce.web.model.MailDto;
@@ -67,7 +67,7 @@ public class EcommerceFacade {
         if (validCard) {
             productService.buyProduct(buyProductDto);
         } else {
-            throw new GeneralException(ErrorCode.INCORRECT_CARD_CREDENTIALS);
+            throw new GeneralException(ErrorMessage.INCORRECT_CARD_CREDENTIALS);
         }
     }
 

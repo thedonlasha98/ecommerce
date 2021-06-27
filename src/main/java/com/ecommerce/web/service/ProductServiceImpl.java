@@ -4,7 +4,7 @@ import com.ecommerce.web.domain.Account;
 import com.ecommerce.web.domain.Product;
 import com.ecommerce.web.domain.ProductHist;
 import com.ecommerce.web.domain.ProductsTransaction;
-import com.ecommerce.web.exception.ErrorCode;
+import com.ecommerce.web.exception.ErrorMessage;
 import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.model.BuyProductDto;
 import com.ecommerce.web.model.ProductDto;
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
             return "Product is modify!";
         } else {
-            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
     }
 
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
             /** delete **/
             productRepository.delete(product);
         } else {
-            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
     }
 
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus("C");
             productRepository.save(product);
         } else {
-            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
     }
 
@@ -121,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
 
             productRepository.save(product);
         } else {
-            throw new GeneralException(ErrorCode.PRODUCTS_USER_AND_USER_NOT_EQUALS);
+            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
         }
     }
 
@@ -165,10 +165,10 @@ public class ProductServiceImpl implements ProductService {
                 }
                 productRepository.save(product);
             } else {
-                throw new GeneralException(ErrorCode.NOT_ENOUGH_BALANCE);
+                throw new GeneralException(ErrorMessage.NOT_ENOUGH_BALANCE);
             }
         } else {
-            throw new GeneralException(ErrorCode.NOT_ENOUGH_QUANTITY_IN_STOCK);
+            throw new GeneralException(ErrorMessage.NOT_ENOUGH_QUANTITY_IN_STOCK);
         }
 
     }
