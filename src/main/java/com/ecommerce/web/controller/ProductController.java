@@ -39,21 +39,21 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id, Long userId) {
         ecommerceFacade.deleteProduct(id, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/modify")
+    @PutMapping
     public ResponseEntity<String> modifyProduct(ProductDto productDto) {
         String response = ecommerceFacade.modifyProduct(productDto);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all")
+    @GetMapping
     public ResponseEntity<List<ProductDto>> getProducts(){
 
         List<ProductDto> response = ecommerceFacade.getProducts();
