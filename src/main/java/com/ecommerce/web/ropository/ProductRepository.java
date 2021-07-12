@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findByProductAndUserId(String product, Long userId);
 
-    Product findByIdAndUserId(Long id, Long userId);
+    Optional<Product> findByIdAndUserId(Long id, Long userId);
 
     Product getProductById(Long id);
 

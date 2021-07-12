@@ -5,6 +5,7 @@ import com.ecommerce.web.utils.EmailCfg;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,7 +13,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Date;
-import java.util.Properties;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -27,31 +27,25 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendMail(MailDto mailDto) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom("thedonlasha@gmail.com");
+        mailMessage.setFrom(emailCfg.getUsername());
         mailMessage.setTo(mailDto.getEmail());
         mailMessage.setSubject(mailDto.getSubject());
         mailMessage.setText(mailDto.getBody());
-        // Send mail
+        /** Send mail **/
         javaMailSender.send(mailMessage);
     }
 
     @Override
     public void sendMailWithAttachment(MailDto mailDto) {
         try {
-            Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", emailCfg.getHost());
-            props.put("mail.smtp.port", emailCfg.getPort());
-
-            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            Session session = Session.getInstance(emailCfg.getProperties(), new javax.mail.Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(emailCfg.getUsername(), emailCfg.getPassword());
                 }
             });
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("thedonlasha@gmail.com", false));
+            msg.setFrom(new InternetAddress(emailCfg.getUsername(), false));
 
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(mailDto.getEmail()));
@@ -64,10 +58,11 @@ public class MailServiceImpl implements MailService {
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
-
-            MimeBodyPart attachPart = new MimeBodyPart();
-            attachPart.attachFile(mailDto.getFileAttach());
-            multipart.addBodyPart(attachPart);
+            if (!StringUtils.isEmpty(mailDto.getFileAttach())) {
+                MimeBodyPart attachPart = new MimeBodyPart();
+                attachPart.attachFile(mailDto.getFileAttach());
+                multipart.addBodyPart(attachPart);
+            }
             msg.setContent(multipart);
             Transport.send(msg);
         } catch (Exception exe) {

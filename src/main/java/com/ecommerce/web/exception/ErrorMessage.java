@@ -14,6 +14,8 @@ public enum ErrorMessage {
 
     PRODUCTS_USER_AND_USER_NOT_EQUALS("Product's user and user not equals!"),
 
+    PRODUCT_NOT_FOUND_WITH_PROVIDED_ID_AND_USER_ID("Product not found with provided id and userId"),
+
     NOT_ENOUGH_QUANTITY_IN_STOCK("Not enough quantity in stock!"),
 
     NOT_ENOUGH_BALANCE("Not enough balance!"),

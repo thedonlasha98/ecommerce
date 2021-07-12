@@ -83,8 +83,10 @@ mvn spring-boot:run
 
 ## Run following SQL insert statements
 ```
-insert into roles values(1,'ROLE_USER');
-insert into roles values(2,'ROLE_MODERATOR');
-insert into roles values(3,'ROLE_ADMIN');
-```
+begin
+  insert into roles values (1, 'USER');
+  insert into roles values (2, 'MODERATOR');
+  insert into roles values (3, 'ADMIN');
+end;
+
 

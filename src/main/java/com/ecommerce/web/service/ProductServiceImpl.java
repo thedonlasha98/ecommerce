@@ -41,6 +41,15 @@ public class ProductServiceImpl implements ProductService {
         this.productsTransactionRepository = productsTransactionRepository;
     }
 
+    public static final String ACTIVE = "A";
+    public static final String CLOSED = "C";
+    public static final String ADD = "ADD";
+    public static final String MODIFY = "MODIFY";
+    public static final String ADD_CURRENT = "ADD_CURRENT";
+    public static final String DELETE = "DELETE";
+    public static final String CLOSE = "CLOSE";
+    public static final String ACTIVATE = "ACTIVATE";
+
     @Override
     public String addProduct(ProductDto productDto) {
         String result = "Check current products!";
@@ -48,15 +57,15 @@ public class ProductServiceImpl implements ProductService {
         if (productExt == null) {
             Product product = new Product();
             BeanUtils.copyProperties(productDto, product);
-            product.setStatus("A");
+            product.setStatus(ACTIVE);
             product = productRepository.save(product);
             /** create log **/
-            createLog(product, "ADD");
+            createLog(product, ADD);
 
             result = "Product is registered successfully!";
-        } else if (productExt.getStatus().equals("A")) {
+        } else if (productExt.getStatus().equals(ACTIVE)) {
             /** create log **/
-            createLog(productExt, "ADD_CURRENT");
+            createLog(productExt, ADD_CURRENT);
             /** add current quantity **/
             productExt.setQuantity(productExt.getQuantity() + productDto.getQuantity());
             productRepository.save(productExt);
@@ -68,66 +77,53 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String modifyProduct(ProductDto productDto) {
-        Product product = productRepository.getProductById(productDto.getProductId());
-        if (product != null && product.getUserId().equals(productDto.getUserId())) {
+        Product product = productRepository.findByIdAndUserId(productDto.getProductId(), productDto.getUserId())
+                .orElseThrow(() -> new GeneralException(ErrorMessage.PRODUCT_NOT_FOUND_WITH_PROVIDED_ID_AND_USER_ID));
             /** create log **/
-            createLog(product, "MODIFY");
+            createLog(product, MODIFY);
             /** modify **/
             BeanUtils.copyProperties(productDto, product);
             productRepository.save(product);
 
             return "Product is modify!";
-        } else {
-            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
-        }
     }
 
-    //TODO
     @Override
     public void deleteProduct(Long id, Long userId) {
-        Product product = productRepository.getProductById(id);
-        if (product.getUserId().equals(userId)) {
+        Product product = productRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new GeneralException(ErrorMessage.PRODUCT_NOT_FOUND_WITH_PROVIDED_ID_AND_USER_ID));
             /** create log **/
-            createLog(product, "DELETE");
+            createLog(product, DELETE);
             /** delete **/
             productRepository.delete(product);
-        } else {
-            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
-        }
+
     }
 
     @Override
     public void closeProduct(Long id, Long userId) {
-        Product product = productRepository.getProductById(id);
-        if (product.getUserId().equals(userId)) {
+        Product product = productRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new GeneralException(ErrorMessage.PRODUCT_NOT_FOUND_WITH_PROVIDED_ID_AND_USER_ID));
             /** create log **/
-            createLog(product, "CLOSE");
+            createLog(product, CLOSE);
             /** close **/
-            product.setStatus("C");
+            product.setStatus(CLOSED);
             productRepository.save(product);
-        } else {
-            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
-        }
     }
 
     @Override
     public void activateProduct(Long id, Long userId) {
-        Product product = productRepository.findByIdAndUserId(id, userId);
-        if (product.getUserId().equals(userId)) {
-            /** create log **/
-            createLog(product, "ACTIVATE");
-            /** activate **/
-            product.setStatus("A");
+        Product product = productRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new GeneralException(ErrorMessage.PRODUCT_NOT_FOUND_WITH_PROVIDED_ID_AND_USER_ID));
+        /** create log **/
+        createLog(product, ACTIVATE);
+        /** activate **/
+        product.setStatus(ACTIVE);
 
-            productRepository.save(product);
-        } else {
-            throw new GeneralException(ErrorMessage.PRODUCTS_USER_AND_USER_NOT_EQUALS);
-        }
+        productRepository.save(product);
     }
 
     @Override
     public List<Product> getProducts() {
-        return productRepository.findAllByStatusOrderByIdDesc("A");
+        return productRepository.findAllByStatusOrderByIdDesc(ACTIVE);
     }
 
     @Transactional
@@ -161,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
 
                 product.setQuantity(product.getQuantity() - buyProductDto.getQuantity());
                 if (product.getQuantity().equals(ZERO)) {
-                    product.setStatus("C");
+                    product.setStatus(CLOSED);
                 }
                 productRepository.save(product);
             } else {

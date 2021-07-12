@@ -1,8 +1,12 @@
 package com.ecommerce.web.utils;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Properties;
+
+@Data
 @Component
 public class EmailCfg {
     @Value("${spring.mail.host}")
@@ -17,35 +21,21 @@ public class EmailCfg {
     @Value("${spring.mail.password}")
     private String password;
 
-    public String getHost() {
-        return host;
-    }
+    @Value("${spring.mail.properties.mail.smtp.auth}")
+    private String auth;
 
-    public void setHost(String host) {
-        this.host = host;
-    }
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private String startTls;
 
-    public int getPort() {
-        return port;
-    }
+    Properties properties = new Properties();
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public Properties getProperties() {
+        if (properties.isEmpty()) {
+            properties.put("mail.smtp.auth", auth);
+            properties.put("mail.smtp.starttls.enable", startTls);
+            properties.put("mail.smtp.host", host);
+            properties.put("mail.smtp.port", port);
+        }
+        return properties;
     }
 }

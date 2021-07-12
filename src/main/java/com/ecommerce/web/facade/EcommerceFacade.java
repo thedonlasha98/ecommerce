@@ -72,7 +72,7 @@ public class EcommerceFacade {
     }
 
     @SneakyThrows
-    @Scheduled(cron = "0 30 2 * * *")
+    @Scheduled(cron = "0 44 0 * * *")
     public void excelReportScheduler() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
