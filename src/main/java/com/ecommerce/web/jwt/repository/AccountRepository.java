@@ -1,6 +1,6 @@
-package com.ecommerce.web.ropository;
+package com.ecommerce.web.jwt.repository;
 
-import com.ecommerce.web.domain.Account;
+import com.ecommerce.web.jwt.domain.Account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

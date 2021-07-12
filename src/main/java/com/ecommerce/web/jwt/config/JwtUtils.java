@@ -1,6 +1,6 @@
 package com.ecommerce.web.jwt.config;
 
-import com.ecommerce.web.ropository.UserRepository;
+import com.ecommerce.web.jwt.repository.UserRepository;
 import com.ecommerce.web.jwt.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 package com.ecommerce.web.jwt.service;
 
-import com.ecommerce.web.domain.User;
-import com.ecommerce.web.ropository.UserRepository;
+import com.ecommerce.web.jwt.domain.User;
+import com.ecommerce.web.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

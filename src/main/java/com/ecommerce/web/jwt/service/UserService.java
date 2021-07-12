@@ -1,6 +1,6 @@
 package com.ecommerce.web.jwt.service;
 
-import com.ecommerce.web.domain.User;
+import com.ecommerce.web.jwt.domain.User;
 import com.ecommerce.web.jwt.request.LoginRequest;
 import com.ecommerce.web.jwt.request.SignupRequest;
 import org.springframework.http.ResponseEntity;

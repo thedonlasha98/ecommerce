@@ -1,9 +1,9 @@
-package com.ecommerce.web.ropository;
+package com.ecommerce.web.jwt.repository;
 
 import java.util.Optional;
 
-import com.ecommerce.web.domain.ERole;
-import com.ecommerce.web.domain.Role;
+import com.ecommerce.web.jwt.domain.ERole;
+import com.ecommerce.web.jwt.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

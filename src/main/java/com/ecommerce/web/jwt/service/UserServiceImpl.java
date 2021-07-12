@@ -1,16 +1,14 @@
 package com.ecommerce.web.jwt.service;
 
-import com.ecommerce.web.domain.*;
-import com.ecommerce.web.exception.ErrorMessage;
-import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.jwt.config.JwtUtils;
+import com.ecommerce.web.jwt.domain.*;
+import com.ecommerce.web.jwt.repository.*;
 import com.ecommerce.web.jwt.request.LoginRequest;
 import com.ecommerce.web.jwt.request.SignupRequest;
 import com.ecommerce.web.jwt.response.JwtException;
 import com.ecommerce.web.jwt.response.JwtResponse;
 import com.ecommerce.web.jwt.response.MessageResponse;
 import com.ecommerce.web.model.MailDto;
-import com.ecommerce.web.ropository.*;
 import com.ecommerce.web.service.MailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

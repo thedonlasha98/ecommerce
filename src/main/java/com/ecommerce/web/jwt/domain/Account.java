@@ -1,4 +1,4 @@
-package com.ecommerce.web.domain;
+package com.ecommerce.web.jwt.domain;
 
 
 

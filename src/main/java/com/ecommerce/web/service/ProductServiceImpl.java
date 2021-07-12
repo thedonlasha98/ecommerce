@@ -1,6 +1,6 @@
 package com.ecommerce.web.service;
 
-import com.ecommerce.web.domain.Account;
+import com.ecommerce.web.jwt.domain.Account;
 import com.ecommerce.web.domain.Product;
 import com.ecommerce.web.domain.ProductHist;
 import com.ecommerce.web.domain.ProductsTransaction;
@@ -8,7 +8,7 @@ import com.ecommerce.web.exception.ErrorMessage;
 import com.ecommerce.web.exception.GeneralException;
 import com.ecommerce.web.model.BuyProductDto;
 import com.ecommerce.web.model.ProductDto;
-import com.ecommerce.web.ropository.AccountRepository;
+import com.ecommerce.web.jwt.repository.AccountRepository;
 import com.ecommerce.web.ropository.ProductHistRepository;
 import com.ecommerce.web.ropository.ProductRepository;
 import com.ecommerce.web.ropository.ProductsTransactionRepository;

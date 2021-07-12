@@ -1,6 +1,6 @@
-package com.ecommerce.web.ropository;
+package com.ecommerce.web.jwt.repository;
 
-import com.ecommerce.web.domain.PasswordRequest;
+import com.ecommerce.web.jwt.domain.PasswordRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
